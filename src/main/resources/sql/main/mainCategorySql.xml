@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mainCategorySql">
+
+	<select id="getCategory" resultType="com.hk.jmt.main.Vo.mainCategoryVo">
+		SELECT CATEGORY_ID,
+			   CATEGORY_NAME,
+			   CATEGORY_CLICK_URL,
+			   CATEGORY_IMG_URL,
+			   CATEGORY_ALT 
+		  FROM category
+	  ORDER BY CATEGORY_ID 	
+	</select>
+ 
+</mapper>

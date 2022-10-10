@@ -1,0 +1,190 @@
+element.style {
+    overflow: auto;
+}
+
+html, body, #root {
+    height: 100%;
+}
+
+html {
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    font-size: 16px;
+    font-family: "맑은 고딕", "Malgun Gothic", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    color: rgb(51, 51, 51);
+}
+
+html {
+    line-height: 1.15;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0px;
+    font-family: Roboto, "Noto Sans KR", sans-serif;
+}
+
+p, table, blockquote, address, pre, iframe, form, figure, dl {
+    margin: 0px;
+}
+
+*, ::before, ::after {
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 0px;
+}
+
+.bfHWAu {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.hszPbh {
+    flex: 1 1 auto;
+}
+
+.ibEPjk {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    max-width: 30rem;
+    margin: 0px auto;
+    padding: 3rem 1.25rem 1.25rem;
+}
+
+.dDyKDq {
+    align-self: center;
+    margin-bottom: 2.75rem;
+}
+
+.gIozqZ {
+    width: 176px;
+    height: 26px;
+    object-fit: contain;
+}
+
+img, embed, object, iframe {
+    vertical-align: bottom;
+}
+
+.gvCoeV {
+    color: rgb(51, 51, 51);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.gvCoeV > strong {
+    font-weight: 500;
+}
+
+b, strong {
+    font-weight: bolder;
+}
+
+.jDpbBC {
+    margin-top: 0.5rem;
+    white-space: pre-wrap;
+}
+
+.gXftiM {
+    color: rgb(51, 51, 51);
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0px;
+}
+
+.iZTAuP {
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.fJVKKg {
+    width: 100%;
+    color: rgb(230, 230, 230);
+}
+
+hr {
+    box-sizing: content-box;
+    height: 0px;
+    overflow: visible;
+    border-top-width: 1px;
+    margin: 0px;
+    clear: both;
+    color: inherit;
+}
+
+.dphKHR {
+    display: flex;
+    flex-direction: row;
+}
+
+.dphKHR > .Typography-sc-1f7r5x6-0 {
+    min-width: 4rem;
+}
+
+.izeKAM {
+    color: rgb(179, 179, 179);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.dphKHR > .Typography-sc-1f7r5x6-0 + .Typography-sc-1f7r5x6-0 {
+    margin-left: 1.25rem;
+}
+
+.dphKHR > .Typography-sc-1f7r5x6-0 {
+    min-width: 4rem;
+}
+
+.Success__Row-sc-mc8m86-0 + .Success__Row-sc-mc8m86-0 {
+    margin-top: 0.5rem;
+}
+
+.bEvUHJ {
+    margin-top: 1.5rem;
+}
+
+.cehFAb {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background-color: rgb(245, 245, 245);
+}
+
+.iWDqsE {
+    color: rgb(51, 51, 51);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.15px;
+}
+
+.bEvUHJ > p + p {
+    margin-top: 0.625rem;
+}
+
+.hAOhCv {
+    margin-top: 3rem;
+}
+
+.gNuxaO {
+    min-width: 5.5rem;
+    min-height: 3rem;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 1.25px;
+    text-transform: capitalize;
+    width: 100%;
+    height: 4rem;
+    font-size: 1.25rem;
+    border-radius: 0.75rem;
+    border-color: rgb(250, 0, 80);
+    background-color: rgb(250, 0, 80);
+    color: rgb(255, 255, 255);
+}
+

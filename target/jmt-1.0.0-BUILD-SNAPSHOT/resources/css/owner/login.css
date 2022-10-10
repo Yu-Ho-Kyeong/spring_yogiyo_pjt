@@ -1,0 +1,671 @@
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: '나눔고딕', NanumGothic, 'Malgun Gothic','맑은 고딕', '돋움', dotum, tahoma, helvetica, sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    background: #fff;
+}
+
+i {
+    font-style: italic;
+}
+
+div {
+    display: block;
+}
+
+body, input, select, textarea, button, table {
+    color: #616161;
+}
+
+#login {
+    width: 600px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 100px 0;
+}
+
+#login h1 {
+    margin-bottom: 22px;
+    text-align: left;
+    color: #fa0050;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+}
+
+	h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+    font-weight: bold;
+}
+
+
+#login h1 .ico {
+    width: 178px;
+    height: 62px;
+    background-position: 0 -1px;
+}
+
+	.ico {
+	    display: inline-block;
+	    vertical-align: middle;
+	}
+
+	#login .form-signin {
+	    position: relative;
+	    width: 580px;
+	    display: block;
+	    margin-left: auto;
+	    margin-right: auto;
+	    margin-top: 5px;
+	    padding: 50px 0;
+	    background: #fff;
+	    box-shadow: 0 0 5px 3px #d0d0d0;
+	}
+	
+		.form-horizontal {
+	    border-top: 1px solid #d0d0d0;
+		}
+		
+		.form-horizontal .control-group {
+		    position: relative;
+		    padding: 7px;
+		    border-bottom: 1px solid #d0d0d0;
+		}
+		
+		.form-horizontal .control-group .control-label {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    bottom: 0;
+		    width: 180px;
+		    padding: 16px 0 0 10px;
+		    font-size: 14px;
+		    font-weight: bold;
+		    color: #616161;
+		    background: #f1f1f1;
+		    letter-spacing: -1px;
+		}
+		
+		#login .control-group {
+		    padding: 0 190px 0 150px;
+		    margin-bottom: 16px;
+		    border: none;
+		    overflow: hidden;
+		}
+		
+		#login label {
+			display: block;
+			position: absolute;
+			top: 8px;
+			left: 80px;
+			width: auto;
+			padding: 0;
+			margin-bottom: 5px;
+			background: none;
+		}
+		
+		#login .control-group {
+		    padding: 0 190px 0 150px;
+		    margin-bottom: 16px;
+		    border: none;
+		    overflow: hidden;
+		}
+		
+		.form-horizontal .control-group .control-label {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    bottom: 0;
+		    width: 180px;
+		    padding: 16px 0 0 10px;
+		    font-size: 14px;
+		    font-weight: bold;
+		    color: #616161;
+		    background: #f1f1f1;
+		    letter-spacing: -1px;
+		}
+		
+		#login .input-wrap {
+		    position: relative;
+		    padding: 0 40px 0 0;
+		}
+		
+		#login .input-wrap .ico-pw {
+		    background-position: -209px -37px;
+		}
+		
+				.input-wrap {
+				    height: 37px;
+				    border: 1px solid #afafaf;
+				}
+				
+		#login .input-wrap .ico-id {
+		    background-position: -207px -11px;
+		}
+	
+		#login .input-wrap .ico {
+		    position: absolute;
+		    top: 8px;
+		    right: 10px;
+		    width: 18px;
+		    height: 20px;
+		}
+		
+		#login .input-wrap .input-block-level {
+		    width: 90%;
+		}
+		
+		#login input {
+		    display: block;
+		    color: #7f7f7f;
+		}
+		
+		.input-wrap .input-block-level {
+		    width: 100%;
+		    padding-top: 5px;
+		    font-size: 15px;
+		    color: #7f7f7f;
+		}
+		
+		.input-wrap input {
+		    background: transparent;
+		    border: none;
+		}		
+		
+		input[type="text"], input[type="number"], input[type="password"], input.txt {
+		    width: auto;
+		    height: 24px;
+		    line-height: 1;
+		    font-size: 18px;
+		    text-align: left;
+		    padding: 4px 2px;
+		    color: #231815;
+		    border: 1px solid #cecece;
+		    outline: 0;
+		    background: transparent;
+		}
+		
+		#login .controls {
+		    padding: 0;
+		    margin: 0;
+		    width: 100px;
+		    position: absolute;
+		    top: 71px;
+		    right: 80px;
+		}
+		
+		#login .controls .button {
+		    height: 94px;
+		}
+		
+		#login .button {
+		    display: block;
+		    width: 100%;
+		    height: 56px;
+		    line-height: 53px;
+		    font-size: 20px;
+		}
+		
+		.button {
+		    text-decoration: none;
+		}
+			
+		button, .button {
+		    display: inline-block;
+		    height: 47px;
+		    text-align: center;
+		    background-color: #fa0050;
+		    color: #fff;
+		    border: none;
+		    border: 1px solid #b4060d;
+		    box-shadow: inset 0 1px 0 #eb8c8f;
+		    font-weight: bold;
+		}
+		
+		.center {
+		    text-align: center !important;
+		}
+			
+		#login .register {
+		    text-align: center;
+		    color: #fa0050;
+		    font-size: 16px;
+		}	
+		
+		a {
+		    background: transparent;
+		}
+		
+		#login ul {
+		    padding: 18px;
+		}
+		
+		ul, ol {
+		    list-style: none;
+		}
+		
+		.login li, #login li {
+		    background-image: url(https://owner.yogiyo.co.kr/media/images/owners/bu_rect.png);
+		    background-position: 0 6px;
+		    background-repeat: no-repeat;
+		    background-size: 2px auto;
+		    color: #888;
+		    font-size: 13px;
+		    line-height: 17px;
+		    padding-left: 10px;
+		    margin-bottom: 10px;
+		}
+		
+		.login-link {
+		    color: #888;
+		    text-decoration: underline;
+		    cursor: pointer;
+		}
+			
+.nav-wrapper .ic-owner-approval, .spr {
+    display: inline-block;
+    background: url(https://owner.yogiyo.co.kr/media/images/owners/spr.png) no-repeat 0 0;
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+    vertical-align: middle;
+}
+
+.form-horizontal {
+    border-top: 1px solid #d0d0d0;
+}
+
+fieldset {
+    border: none;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    width: 600px;
+    margin-left: -300px;
+    z-index: 1050;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+    background: #fff;
+}
+		.fade {
+		    opacity: 0;
+		    -webkit-transition: opacity 0.15s linear;
+		    -moz-transition: opacity 0.15s linear;
+		    -o-transition: opacity 0.15s linear;
+		    transition: opacity 0.15s linear;
+		}
+		.popup-pwd-notice {
+		    width: 400px;
+		}
+
+		.modal-header {
+		    position: relative;
+		    min-height: 16.42857143px;
+		    padding: 20px 17px;
+		    font-size: 17px;
+		    border-bottom: 1px solid #e5e5e5;
+		    background: #fa0050;
+		}
+		
+		.modal-header .close {
+		    position: absolute;
+		    padding: 5px;
+		    display: inline-block;
+		    top: 17px;
+		    right: 15px;
+		    background: url(https://owner.yogiyo.co.kr/media/images/owners/spr.png) no-repeat 0 0;
+		    font: 0/0 a;
+		    color: transparent;
+		    text-shadow: none;
+		    background-color: transparent;
+		    border: 0;
+		    vertical-align: middle;
+		    width: 22px;
+		    height: 22px;
+		    background-position: -236px -7px;
+		    box-shadow: none;
+		    border: none;
+		    -webkit-box-sizing: content-box;
+		    -moz-box-sizing: content-box;
+		    box-sizing: content-box;
+		}
+		
+		.modal-header h3 {
+		    padding: 0 !important;
+		    color: #fff !important;
+		}
+		
+		.modal-body {
+		    position: relative;
+		}
+		
+		.modal-body strong {
+		    color: #fa0050;
+		}
+		
+		b, strong {
+		    font-weight: bold;
+		}
+		
+		.pop-btns {
+		    text-align: center;
+		    padding: 20px 0;
+		}
+		
+		.pop-btns .btn1 {
+		    background-color: #fff;
+		    border: 1px solid #888;
+		    color: #646464;
+		}
+		
+		.pop-btns .btn {
+		    display: inline-block;
+		    width: 172px;
+		    height: 47px;
+		    line-height: 47px;
+		    text-decoration: none;
+		    text-align: center;
+		    font-weight: bold;
+		    margin: 0 4px;
+		}
+		
+		.pop-btns .btn2 {
+		    background-color: #e61c13;
+		    border: 1px solid #b4060d;
+		    color: #fff;
+		}
+		
+		
+		
+/****************************************************************/
+html {
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    font-size: 16px;
+    font-family: "맑은 고딕", "Malgun Gothic", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.15;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0px;
+    font-family: Roboto, "Noto Sans KR", sans-serif;
+}
+
+p, table, blockquote, address, pre, iframe, form, figure, dl {
+    margin: 0px;
+}
+
+div {
+    display: block;
+}
+
+*, ::before, ::after {
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 0px;
+}
+
+.kcGnnU {
+    margin-bottom: 1.5rem;
+}
+
+.hkXQXW {
+    display: flex;
+    flex-direction: column;
+}
+
+.knFmXP {
+    display: inline-flex;
+    flex-direction: column;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+}
+
+.ePFHkj {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 0.75rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.ePFHkj .Input__InputBase-sc-ecqot1-0 {
+    height: 4rem;
+    padding: 1.5rem 1rem 0.75rem;
+    background-color: inherit;
+}
+
+.jChvrt {
+    line-height: 1;
+    height: 4rem;
+    border-radius: 0.75rem;
+}
+
+button, input {
+    overflow: visible;
+}
+
+button, input, optgroup, select, textarea {
+    appearance: none;
+    vertical-align: middle;
+    color: inherit;
+    font: inherit;
+    background: transparent;
+    padding: 0px;
+    margin: 0px;
+    outline: 0px;
+    border-radius: 0px;
+    text-align: inherit;
+}
+
+.ePFHkj .Label__TextFieldLabel-sc-168532h-0 {
+    transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1) 0ms;
+    transform-origin: left top;
+    transform: translate(1rem, 1.5rem) scale(1);
+}
+
+.geRZEl {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    color: rgb(153, 153, 153);
+    line-height: 1rem;
+    pointer-events: none;;
+}
+
+.kcGnnU > * + * {
+    margin-top: 0.5rem;
+}
+
+.ePFHkj .Input__InputBase-sc-ecqot1-0 {
+    height: 4rem;
+    padding: 1.5rem 1rem 0.75rem;
+    background-color: inherit;
+}
+
+.ePFHkj .Label__TextFieldLabel-sc-168532h-0 {
+    transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1) 0ms;
+    transform-origin: left top;
+    transform: translate(1rem, 1.5rem) scale(1);
+}
+
+button, [type="button"], [type="reset"], [type="submit"] {
+    cursor: pointer;
+    appearance: none;
+}
+
+.gNuxaO {
+    min-width: 5.5rem;
+    min-height: 3rem;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 1.25px;
+    text-transform: capitalize;
+    width: 100%;
+    height: 4rem;
+    font-size: 1.25rem;
+    border-radius: 0.75rem;
+    border-color: rgb(250, 0, 80);
+    background-color: rgb(250, 0, 80);
+    color: rgb(255, 255, 255);
+}
+
+.dXyLpL {
+    margin-bottom: 1.5rem;
+}
+
+.gHCrVu {
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.gJKQGA {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    min-width: 0px;
+    height: auto;
+    cursor: pointer;
+}
+
+.hIpusG[type="checkbox"], .hIpusG[type="radio"] {
+    cursor: pointer;
+}
+
+[type="checkbox"] {
+    appearance: checkbox;
+}
+
+.hIpusG {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.jrRfUF:not(:checked) ~ .Checkbox__CheckedCheckBoxIcon-sc-1v1oqxw-0 {
+    display: none;
+}
+
+.jrRfUF:checked ~ .Checkbox__UnCheckedCheckBoxIcon-sc-1v1oqxw-1 {
+    display: none;
+}
+
+.gAQJBk {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiByeD0iNCIgZmlsbD0iI0ZBMDA1MCIvPgo8cGF0aCBkPSJNNi40NTk5NiAxMy45ODg5TDEyLjgyMzkgMjAuMzUyOUwyMy4xNjU0IDEwLjAxMTQiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==););
+}
+
+.dPTAmT {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.ejgJPO {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiByeD0iNCIgZmlsbD0iI0VCRUJFQiIvPgo8cGF0aCBkPSJNNi40NTk5NiAxMy45ODg5TDEyLjgyMzkgMjAuMzUyOUwyMy4xNjU0IDEwLjAxMTQiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==);
+}
+
+.gHCrVu > * + * {
+    margin-left: 0.25rem;
+}
+
+.fJVKKg {
+    width: 100%;
+    color: rgb(230, 230, 230);
+}
+
+hr {
+    box-sizing: content-box;
+    height: 0px;
+    overflow: visible;
+    border-top-width: 1px;
+    margin: 0px;
+    clear: both;
+    color: inherit;
+}
+
+.fffMuh {
+    display: flex;
+    flex-direction: row;
+    padding: 1.5rem 0px 2rem;
+}
+
+.fffMuh a {
+    flex: 1 0 auto;
+    min-width: 0px;
+    text-align: center;
+    text-decoration: none;
+}
+
+a {
+    background-color: transparent;
+    text-decoration: none;
+    color: inherit;
+}
+
+.fffMuh > a + a {
+    border-left: 1px solid rgb(217, 217, 217);
+}
+
+.ibEPjk {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    max-width: 30rem;
+    margin: 0px auto;
+    padding: 3rem 1.25rem 1.25rem;
+}
+
+.dDyKDq {
+    align-self: center;
+    margin-bottom: 2.75rem;
+}
+
+.gIozqZ {
+    width: 176px;
+    height: 26px;
+    object-fit: contain;
+}
+
+img, embed, object, iframe {
+    vertical-align: bottom;
+}
+
+
+
+
+
+

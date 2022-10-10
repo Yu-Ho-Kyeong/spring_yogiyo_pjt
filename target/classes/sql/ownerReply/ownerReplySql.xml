@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="ownerReplySql">
+
+	<!-- 01.사장님 댓글가져오기 -->
+	<select id="getOwnerReply" resultType="ownerReply">
+		SELECT *
+		  FROM owner_reply
+		 WHERE STORE_NO = #{storeNo}
+	</select>
+	<select id="countReplyNo" resultType="int">
+		SELECT COUNT(OWNER_REPLY_NO)
+		  FROM owner_reply
+		 WHERE STORE_NO = #{storeNo}
+		   AND REVIEW_NO = #{reviewNo}
+	</select>
+	<!-- 02.사장님 댓글달기 -->
+	<insert id ="createReply" parameterType="ownerReply">
+	   INSERT INTO owner_reply(OWNER_REPLY_CONTENT,
+				   			   OWNER_REPLY_DATE,
+				   			   OWNER_ID,
+				   			   REVIEW_NO, 
+				   			   STORE_NO
+				   			   )
+			VALUES (#{ownerReplyContent},
+				    now(),
+				    #{ownerId},
+				    #{reviewNo},
+				    #{storeNo}
+				    )
+	</insert>
+	<!-- 03.사장님 댓글 개수 반영-->
+	<update id="updateReplyCnt">
+		UPDATE store 
+		   SET STORE_REPLY_CNT = STORE_REPLY_CNT + 1
+		 WHERE STORE_NO = #{storeNo}
+	</update>
+	
+</mapper>

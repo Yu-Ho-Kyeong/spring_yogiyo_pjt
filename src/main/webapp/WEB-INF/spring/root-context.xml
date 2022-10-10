@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<!-- properties 파일 읽기 -->
+	<util:properties id="config" location="classpath:/config/config.properties"/>
+    
+    <!-- 
+    	네트워킹 : device를 식별할 수 있는 이름이 필요 (랜카드 주소로 식별)
+    		ip? X - 얼마든지 조작 가능
+    		LAN 카드에 48비트 MAC 주소(H/W주소)
+    		실제 네트워킹은 ip를 mac으로 변환해서 수행
+     -->
+    
+    <!-- Hikari 설정 -->
+    <!-- 커넥션 pool : 연결을 미리 만들어두고 빌려서 사용 후 반납
+    		apache dbcp - ver1, ver2 설정이 다르다
+    		hikari - spring boot의 커넥션풀
+    	 커넥션 pool을 누가 관리?
+    	 	서버
+    	 	개별 웹 애플리케이션(WAS)	
+     -->
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+    	<property name="driverClassName" value="#{config['spring.datasource.driver-class-name']}" />
+    	<property name="jdbcUrl" value="#{config['spring.datasource.url']}" />
+    	<property name="username" value="#{config['spring.datasource.username']}" />
+		<property name="password" value="#{config['spring.datasource.password']}" />		
+    </bean>
+    
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:/mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath:/sql/**/*.xml" />
+	</bean>
+	
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+		destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+	<!-- 트랜잭션 관리자 설정 -->
+	<bean id="txManager" 
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- xml + class. @Repository -->
+	<context:component-scan base-package="com.hk.jmt" />
+	
+	<context:component-scan base-package="com.hk.jmt" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+ 	<!-- WebSocket --> 
+<!-- 	<bean id="messageWebSocketHandler" class="com.icia.jmt.util.webSocket.MessageWebSocketHandler" /> -->
+<!-- 	<websocket:handlers> -->
+<!-- 		<websocket:mapping path="/web/socket" handler="messageWebSocketHandler" /> -->
+<!-- 	</websocket:handlers> -->
+	
+	
+	<bean id="gson" class="com.google.gson.Gson" />
+	<bean id="tika" class="org.apache.tika.Tika" />
+	<bean id="mailUtil" class="com.hk.jmt.util.MailUtil" />
+	
+	<!-- csrf를 포함한 파일 업로드 빈 -->
+	<bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+		<property name="maxInMemorySize" value="10000000" />
+		<property name="maxUploadSize" value="10000000" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean> 
+	
+	<bean id="uploadPath" class="java.lang.String">
+		<constructor-arg value="service\upload\"></constructor-arg>
+	</bean>
+	
+	<!-- 메일설정 -->
+	<bean id="sender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!-- 메일 송신:SMTP, 메일 수신:POP3, IMAP4 -->
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="kos12753@gmail.com" />
+		<property name="password" value="taeyeon127%" />
+		<property name="javaMailProperties">
+		
+			<!-- Properties를 직접 적는다 -->
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.timeout">10000</prop>
+				<!-- 메일발송 log를 찍어라 -->
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 스프링 스케줄러 @Scheduled 설정 -->
+	<!-- @Scheduled를 서비스에 적용. 서비스를 스캔하는 곳에서 설정을 잡아야 함  -->
+<!-- 	<bean id="careerAlarmService" class="com.icia.jmt.service.Impl.UserServiceImpl" /> -->
+<!-- 	<task:executor id="scheduledExecutor" pool-size="20"/> -->
+<!-- 	<task:annotation-driven executor="scheduledExecutor" /> -->
+	
+</beans>

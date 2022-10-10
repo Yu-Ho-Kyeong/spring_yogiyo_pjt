@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="ownerAuthoritySql">
+			
+	<!--01. 회원 정보 INSERT -->
+	<insert id="insertOwner">
+		INSERT INTO owner (OWNER_ID, OWNER_PWD, OWNER_NAME, OWNER_MAIL, OWNER_ENABLED)
+		VALUES (#{ownerId}, #{ownerPwd}, #{ownerName}, #{ownerMail}, #{ownerEnabled})
+	</insert>
+	
+	<!-- 02. 회원 권한 생성 -->
+	<insert id="insertAuth">
+		INSERT INTO owner_auth (OWNER_ID, AUTHORITY_NAME)
+		VALUES (#{ownerId}, #{authorityName})	  
+	</insert> 
+	
+	<!-- ID로 회원 정보 조회 -->
+	<select id="findOwner" resultType="ownerDetailsVo">
+		SELECT OWNER_ID ,
+			   OWNER_PWD ,
+			   OWNER_NAME ,
+			   OWNER_MAIL ,
+			   OWNER_ENABLED
+		  FROM owner
+		 WHERE OWNER_ID = #{ownerId}
+	</select>
+	
+	<!-- ID로 회원 권한 조회 -->
+	<select id="findAuth" resultType="String" >
+		SELECT AUTHORITY_NAME
+		  FROM owner_auth 
+		 WHERE OWNER_ID = #{ownerId}
+	</select>
+
+</mapper>

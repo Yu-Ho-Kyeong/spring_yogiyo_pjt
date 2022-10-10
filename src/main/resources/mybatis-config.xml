@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org/DTD config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- null 입력 허용 : 컬럼 단위 또는 여기서 -->
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />      
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+	
+	<typeAliases>
+		<typeAlias alias="member" type="com.hk.jmt.member.Vo.MemberVO" />
+		<typeAlias alias="auth" type="com.hk.jmt.member.Vo.MemberAuthVO" />
+		<typeAlias alias="detailsVo" type="com.hk.jmt.security.Vo.MemberDetailsVO" />		
+		<typeAlias alias="owner" type="com.hk.jmt.owner.Vo.OwnerVO" />
+		<typeAlias alias="ownerAuth" type="com.hk.jmt.owner.Vo.OwnerAuthVO" />
+		<typeAlias alias="ownerDetailsVo" type="com.hk.jmt.security.Vo.OwnerDetailsVO" />	
+		<typeAlias alias="store" type="com.hk.jmt.store.Vo.StoreVO" />		
+		<typeAlias alias="menu" type="com.hk.jmt.menu.Vo.MenuVO" />
+		<typeAlias alias="menuCategory" type="com.hk.jmt.menu.Vo.MenuCategoryVO" />		
+		<typeAlias alias="review" type="com.hk.jmt.review.Vo.ReviewVO" />
+		<typeAlias alias="reviewCategory" type="com.hk.jmt.review.Vo.ReviewCategoryVO" />		
+		<typeAlias alias="ownerReply" type="com.hk.jmt.ownerReply.Vo.OwnerReplyVO" />
+		<typeAlias alias="order" type="com.hk.jmt.order.Vo.OrderVO" />
+		<typeAlias alias="orderList" type="com.hk.jmt.order.Vo.OrderList" />
+		<typeAlias alias="cart" type="com.hk.jmt.cart.Vo.CartVO" />
+		<typeAlias alias="criteria" type="com.hk.jmt.util.Criteria" />
+	</typeAliases>
+	    
+	<!-- 
+		사용자 입출력 String -> 적절한 내부 타입으로 변환
+		스프링
+			입력: PropertyEditor 	@InitBinder
+			출력: MessageConverter 	annotation-driven에 만듦
+		마이바티스: typeHandler
+	 -->
+	<typeHandlers>
+<!-- 		<typeHandler javaType="com.icia.jmt.data.entity.Level" handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" /> -->
+	</typeHandlers>
+</configuration>

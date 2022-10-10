@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reviewSql">
+	<resultMap type="review" id="review">
+         <id column="review_no" property="reviewNo"/>
+         <result column="member_id" property="memberId"/>
+         <result column="review_menu_name" property="reviewMenuName"/>
+         <result column="review_content" property="reviewContent"/>
+         <result column="reveiw_date" property="reviewDate"/>
+         <result column="review_img" property="reviewImg" />
+         <result column="order_no" property="orderNo" />
+         <result column="store_no" property="storeNo" />
+         <result column="review_star_point" property="reviewStarPoint" />
+         <result column="review_mat_point" property="reviewMatPoint" />
+         <result column="review_yang_point" property="reviewYangPoint" />
+         <result column="review_baedal_point" property="reviewBaedalPoint" />
+         <association property="order" javaType="order" resultMap="order"></association>
+   </resultMap>
+   <resultMap type="order" id="order">
+         <id column="order_no" property="orderNo"/>
+         <result column="order_date" property="orderDate"/>
+         <result column="order_payment_method" property="orderPaymentMethod"/>
+         <result column="order_menu" property="orderMenu"/>
+         <result column="order_amount" property="orderAmount"/>
+         <result column="order_total_price" property="orderTotalPrice"/>
+         <result column="order_tel" property="orderTel"/>
+         <result column="order_address" property="orderAddress"/>
+         <result column="order_request" property="orderRequest"/>
+         <result column="store_no" property="storeNo"/>
+         <result column="member_id" property="memberId"/>
+         <result column="order_enabled" property="orderEnabled"/>
+         <result column="order_store_name" property="orderStoreName"/>
+   </resultMap>
+	
+	
+	<!-- 01. 리뷰 등록 -->
+	<insert id="createReview">
+		INSERT INTO review (MEMBER_ID,
+							REVIEW_MENU_NAME,
+							REVIEW_CONTENT,
+							REVIEW_DATE,
+							REVIEW_MAT_POINT,
+							REVIEW_YANG_POINT,
+							REVIEW_BAEDAL_POINT,
+							REVIEW_IMG,
+							ORDER_NO,
+							STORE_NO						
+							) 
+		values(#{memberId},
+			   #{reviewMenuName},
+			   #{reviewContent},
+			   now(),
+			   #{reviewMatPoint},
+			   #{reviewYangPoint},
+			   #{reviewBaedalPoint},
+			   #{reviewImg},
+			   #{orderNo},
+			   #{storeNo}
+			   )
+	</insert>
+	<!-- 02. 리뷰 업데이트(등록용) -->
+	<update id="updateReview"  useGeneratedKeys="true" keyProperty="reviewNo">
+		<selectKey keyProperty="reviewNo" resultType="int" order="BEFORE">
+		 	SELECT MAX(REVIEW_NO)FROM review
+		</selectKey>
+		UPDATE review 
+		   SET REVIEW_IMG = #{reviewImg} 
+		 WHERE REVIEW_NO = #{reviewNo}
+	</update>
+	<!-- 03. 리뷰 삭제 -->
+	<delete id="deleteReview">
+		DELETE 
+		  FROM review
+		 WHERE REVIEW_NO = #{reviewNo}
+	</delete>
+	<!-- 03. 리뷰  -->
+	<update id="updateReviewEnabled">
+		UPDATE member_order
+		   SET ORDER_ENABLED = '1' 
+		 WHERE ORDER_NO = #{orderNo}
+	</update>
+	<!-- 04. 리뷰 좋아요  -->
+	<update id="likeReview">
+		UPDATE review 
+		   SET REVIEW_RECOMMEND_CNT = reviewRecommendCnt + 1
+		 WHERE REVIEW_NO = #{reviewNo}
+	</update>
+	<update id="updateReviewCnt">
+		UPDATE store 
+		   SET STORE_REVIEW_CNT = STORE_REVIEW_CNT + 1
+		 WHERE STORE_NO = #{storeNo}
+	</update>
+	<!-- 02. 리뷰 조회 -->
+	<select id="getReviewList" resultType="review">
+		<![CDATA[
+			SELECT *
+			  FROM (
+				    SELECT @ROWNUM:=@ROWNUM+1 as ROWNUM, r.* 
+				      FROM review r,
+						   (SELECT @ROWNUM := 0) RN
+					 WHERE STORE_NO = #{storeNo}
+				  ORDER BY REVIEW_DATE DESC) rr
+			WHERE ROWNUM >= #{rowStart}
+			  AND ROWNUM <= #{rowEnd}
+		]]>
+	</select>
+	<select id="getMemberReview" resultMap="review">
+		SELECT MO.*, R.*
+		  FROM member_order MO	
+		  JOIN review R
+		    ON MO.ORDER_NO = R.ORDER_NO 				
+		 WHERE R.MEMBER_ID = #{memberId}
+		 ORDER BY R.REVIEW_DATE DESC
+	</select>
+	<!-- 02. 리뷰 카테고리 조회(맛,양,배달) -->
+	<select id="getReviewCategory" resultType="reviewCategory">
+		SELECT *
+		FROM review_category
+		WHERE STORE_NO = #{storeNo}
+	</select> 
+	<select id="countReview" resultType="int">
+		SELECT COUNT(REVIEW_NO) 
+		 FROM review
+		WHERE STORE_NO = #{storeNo}
+	</select>
+	<select id="countMemberReview" resultType="int">
+		SELECT COUNT(REVIEW_NO) 
+		 FROM review
+		WHERE STORE_NO = #{storeNo}
+		  AND MEMBER_ID = #{memberId}
+	</select>
+	<!-- 03. 맛 별점 평균  -->
+	<select id="avgMatPoint" resultType="double">
+		SELECT ROUND(AVG(REVIEW_MAT_POINT),1)
+		  FROM review
+		 WHERE STORE_NO = #{storeNo}  
+	</select>
+	<!-- 04. 양 별점 평균  -->
+	<select id="avgYangPoint" resultType="double">
+		SELECT ROUND(AVG(REVIEW_YANG_POINT),1)
+		  FROM review
+		 WHERE STORE_NO = #{storeNo}   
+	</select>
+	<!-- 05. 배달 별점 평균  -->
+	<select id="avgBaedalPoint" resultType="double">
+		SELECT ROUND(AVG(REVIEW_BAEDAL_POINT),1)
+		  FROM review
+		 WHERE STORE_NO = #{storeNo}
+	</select>	
+	<!-- 06. 총 별점 평균  -->
+	<select id="avgStarPoint" resultType="double">
+		SELECT ROUND(REVIEW_STAR_POINT/3, 1) AS REVIEW_STAR_POINT
+		FROM (
+				SELECT (IFNULL(AVG(REVIEW_MAT_POINT),0)+
+					    IFNULL(AVG(REVIEW_YANG_POINT),0)+
+					    IFNULL(AVG(REVIEW_BAEDAL_POINT),0)) AS REVIEW_STAR_POINT
+				  FROM review R
+				 WHERE STORE_NO = #{storeNo}
+			  GROUP BY STORE_NO
+				HAVING STORE_NO = #{storeNo}
+			) AS R
+	</select>	
+</mapper>

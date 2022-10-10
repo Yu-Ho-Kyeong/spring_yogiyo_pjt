@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="authoritySql">
+			
+	<!--회원 정보 INSERT -->
+	<insert id="insertMember">
+		INSERT INTO member_yogiyo (MEMBER_ID, MEMBER_PWD, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE_NO, MEMBER_MAIL, MEMBER_ENABLED)
+		VALUES (#{memberId}, #{memberPwd}, #{memberName}, #{memberAddress}, #{memberPhoneNo}, #{memberMail}, #{memberEnabled})
+	</insert>
+	
+	<!-- 회원 권한 생성 -->
+	<insert id="insertAuthority">
+		INSERT INTO member_auth (MEMBER_ID, AUTHORITY_NAME)
+		VALUES (#{memberId}, #{authorityName})	  
+	</insert> 
+	
+	<!-- ID로 회원 정보 조회 -->
+	<select id="findMember" resultType="detailsVo">
+		SELECT MEMBER_ID ,
+			   MEMBER_PWD ,
+			   MEMBER_NAME ,
+			   MEMBER_MAIL ,
+			   MEMBER_ENABLED
+		  FROM member_yogiyo
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<!-- ID로 회원 권한 조회 -->
+	<select id="findAuth" resultType="String" >
+		SELECT AUTHORITY_NAME
+		  FROM member_auth 
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+
+</mapper>

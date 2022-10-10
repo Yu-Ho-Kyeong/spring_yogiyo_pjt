@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberSql">
+		
+	<!-- 01.id 중복체크 쿼리문 -->
+	<select id="idCheck" resultType="int">
+		<![CDATA[
+			SELECT COUNT(MEMBER_ID)
+			  FROM member_yogiyo
+			 WHERE MEMBER_ID = #{memberId}
+		]]>		
+		</select>
+	<!-- 02.닉네임 중복체크 쿼리문 -->
+	<select id="nameCheck" resultType="int">
+		<![CDATA[
+			SELECT COUNT(MEMBER_NAME)
+			  FROM member_yogiyo
+			 WHERE MEMBER_NAME = #{memberName}
+		]]>		
+	</select>
+	<!-- 03. 회원 id 찾기 -->
+	<select id="memberFindId" resultType="string">
+		SELECT MEMBER_ID 
+		  FROM member_yogiyo
+		 WHERE MEMBER_NAME = #{memberName} 
+		   AND MEMBER_MAIL = #{memberMail} 
+	</select>
+	<!-- 03. 회원 비밀번호 찾기 -->
+	<select id="memberFindPwd" resultType="string">
+		SELECT MEMBER_PWD
+		  FROM member_yogiyo 
+		 WHERE MEMBER_ID = #{memberId} 
+		   AND MEMBER_MAIL = #{memberMail} 
+	</select>
+	<!-- 04.아이디로 비밀번호 불러오기 (비밀번호 변경시 사용) -->
+	<select id="findPwdById" resultType="string">
+		SELECT MEMBER_PWD 
+		  FROM member_yogiyo 
+		 WHERE MEMBER_ID = #{memberId} 
+	</select>
+	<!-- 04. 회원 비밀번호 변경 -->
+	<update id="memberChangePwd">
+		UPDATE member_yogiyo
+		   SET MEMBER_PWD = #{memberPwd}
+		 WHERE MEMBER_ID = #{memberId}
+	</update>	
+	<!-- 05. 회원 정보 조회-->
+	<select id="memberMyPage" resultType="member">
+		SELECT MEMBER_ID, MEMBER_NAME, MEMBER_MAIL, MEMBER_ADDRESS
+		  FROM member_yogiyo
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	<!-- 06. 회원 주소 변경-->
+	<update id="memberUpdateAddr">
+		UPDATE member_yogiyo 
+		   SET MEMBER_ADDRESS = #{memberAddress} 
+		 WHERE MEMBER_ID = #{memberId}
+	</update>
+	<!-- 08. 회원 닉네임 변경-->
+	<update id="memberUpdateName">
+		UPDATE member_yogiyo 
+		   SET MEMBER_NAME = #{memberName} 
+		 WHERE MEMBER_ID = #{memberId}
+	</update>
+	<!-- 09. 회원 정보 변경-->
+	<update id="memberUpdate" parameterType="member">
+		UPDATE member_yogiyo
+		   SET MEMBER_MAIL = #{memberMail},
+		 	   MEMBER_ADDRESS = #{memberAddress}
+	  	 WHERE MEMBER_ID = #{memberId} 
+	</update>
+	<!-- 10. 회원 탈퇴-->
+	<delete id="memberDelete">
+		DELETE FROM member_yogiyo 
+		 WHERE MEMBER_ID = #{memberId}
+	</delete>
+	<!-- 11. 회원 탈퇴-->
+	<delete id="authDelete">
+		DELETE FROM member_auth
+		 WHERE MEMBER_ID = #{memberId}
+	</delete>
+	<!-- 12. 회원 아이디로 비밀번호 확인-->
+	<select id="memberPwdCheck" resultType="string">
+		SELECT MEMBER_PWD 
+		  FROM member_yogiyo 
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<!-- 13. 아이디로 회원 정보 찾기 -->
+	<select id="findMember" parameterType="member">
+		SELECT *
+		  FROM member_yogiyo
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	
+</mapper>

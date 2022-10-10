@@ -1,0 +1,1245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="categorySql">
+
+	<!-- 01.카테고리 이름 리스트 -->
+	<select id="getCategoryMenu" resultType="com.hk.jmt.main.Vo.mainCategoryVo">
+		SELECT CATEGORY_NAME, CATEGORY_CLICK_URL
+		  FROM category 		
+	</select>
+	<!-- 02.전체보기 카운트 -->
+	<select id="countAll" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+	]]>
+	</select>
+	<!-- 03.1인분 카운트 -->
+	<select id="countOneOrder" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		 AND CATEGORY_ID = 1
+	]]>
+	</select>
+	<!-- 04.프렌차이즈 카운트 -->
+	<select id="countFranchise" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 2
+	]]>
+	</select>
+	<!-- 05.치킨 카운트 -->
+	<select id="countChicken" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 3
+	]]>
+	</select>
+	<!-- 06.양식 카운트 -->
+	<select id="countYangsik" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 4
+	]]>
+	</select>
+	<!-- 07.중식 카운트 -->
+	<select id="countChina" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 5
+	]]>
+	</select>
+	<!-- 08.한식 카운트 -->
+	<select id="countKorea" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 6
+	]]>
+	</select>
+	<!-- 09.일식 카운트 -->
+	<select id="countJapan" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 7
+	]]>
+	</select>
+	<!-- 10.족발 카운트 -->
+	<select id="countJokbal" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 8
+	]]>
+	</select>
+	<!-- 11.야식 카운트 -->
+	<select id="countYasik" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 9
+	]]>
+	</select>
+	<!-- 12.분식 카운트 -->
+	<select id="countBoonsik" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 10
+	]]>
+	</select>
+	<!-- 13.디저트 카운트 -->
+	<select id="countDesert" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 11
+	]]>
+	</select>
+	<!-- 14.편의점 카운트 -->
+	<select id="countMart" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 WHERE CATEGORY_ID > 0
+		   AND CATEGORY_ID = 12
+	]]>
+	</select>
+	<!-- 15.전체보기 리스트 -->
+	<select id="listAll" resultType="store" parameterType="criteria">
+			<![CDATA[
+			SELECT STORE_NO,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 16.일인분주문 리스트 -->
+	<select id="listOneOrder" resultType="store" parameterType="criteria">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 1
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 17.프렌차이즈 리스트 -->
+	<select id="listFranchise" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 2
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		  ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 18.치킨 리스트 -->
+	<select id="listChicken" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 3
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 19.양식 리스트 -->
+	<select id="listYangsik" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 4
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 20.중식 리스트 -->
+	<select id="listChina" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 5
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 21.한식 리스트 -->
+	<select id="listKorea" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 6
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 22.일식 리스트 -->
+	<select id="listJapan" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 7
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 23.족발 리스트 -->
+	<select id="listJokbal" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 8
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 24.야식 리스트 -->
+	<select id="listYasik" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 9
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 25.분식 리스트 -->
+	<select id="listBoonsik" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 10
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 26.디저트 리스트 -->
+	<select id="listDesert" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 11
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- 27.편의점 리스트 -->
+	<select id="listMart" resultType="store">
+		<![CDATA[
+			SELECT STORE_NO,
+				   CATEGORY_ID,
+				   STORE_LOGO_URL, 
+				   STORE_NAME, 
+				   STORE_STAR_POINT,
+				   STORE_REVIEW_CNT, 
+				   STORE_REPLY_CNT,
+				   STORE_DELIVERY_TIME,
+				   STORE_PAYMENT_METHOD,
+				   STORE_MIN_PRICE,
+				   STORE_CUPON_BASE,
+				   STORE_ENABLED
+			 FROM ( 
+				   SELECT STORE_NO,
+				   		  CATEGORY_ID,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED,
+					      ROW_NUMBER() OVER(ORDER BY STORE_NO DESC) AS RNUM
+				     FROM store 
+					WHERE CATEGORY_ID = 12
+				   ) S
+			 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		   ORDER BY STORE_NO DESC
+		]]>
+	</select>
+	<!-- ALL 정렬 리뷰 많은 순 -->
+	<select id="listAllReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listOneOrderReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM STORE
+		   		  WHERE CATEGORY_ID = 1 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listFranchiseReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 2
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listChickenReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 3
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listYangsikReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 4
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listChinaReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 5
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listKoreaReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 6
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listJapanReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 7 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listJokbalReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 8 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listYasikReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 9 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listBoonsikReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 10 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listDesertReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 11
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<select id="listMartReviewSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_REVIEW_CNT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 12
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_REVIEW_CNT DESC
+	</select>
+	<!-- ALL 정렬 별점 높은순 -->
+	<select id="listAllStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listOneOrderStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 1 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listFranchiseStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 2
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listChickenStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 3
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listYangsikStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 4
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listChinaStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 5
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listKoreaStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 6
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listJapanStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 7 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listJokbalStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 8 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listYasikStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 9 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listBoonsikStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store
+		   		  WHERE CATEGORY_ID = 10 
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listDesertStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 11
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	<select id="listMartStarSort" resultType="store">
+		SELECT *
+	      FROM ( 
+				SELECT STORE_NO,
+					   STORE_LOGO_URL, 
+					   STORE_NAME, 
+					   STORE_STAR_POINT, 
+					   STORE_REVIEW_CNT, 
+					   STORE_REPLY_CNT,
+					   STORE_DELIVERY_TIME,
+					   STORE_PAYMENT_METHOD,
+					   STORE_MIN_PRICE,
+					   STORE_CUPON_BASE,
+					   STORE_ENABLED,
+					   ROW_NUMBER() OVER(ORDER BY STORE_STAR_POINT DESC) AS RNUM
+		   		  FROM store 
+		   		  WHERE CATEGORY_ID = 12
+			   	) S
+		 WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	  ORDER BY STORE_STAR_POINT DESC
+	</select>
+	
+	<!-- 28. criteria(검색조건) -->
+	<sql id="criteria">
+		<if test="keyword != null">
+			STORE_NAME like '%' || #{keyword} || '%' AND
+		</if>
+	</sql>
+	<!-- 29. 게시물 총 개수(검색용)-->
+	<select id="getTotal" resultType="int">
+		SELECT COUNT(CATEGORY_ID)
+		  FROM store
+		 <if test="keyword != null">
+			WHERE STORE_NAME like '%'||#{keyword}||'%' 
+         </if>
+	</select>
+	<!-- 30. 검색 리스트 -->
+	<select id="getSearchList" resultType="store" parameterType="criteria">
+			<![CDATA[
+			SELECT *
+			 FROM ( 
+				   SELECT /*+INDEX_DESC(STORE STORE_PK_STORE_NO)*/
+				   		  ROWNUM AS rn,
+				   		  STORE_NO,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED 
+				     FROM store
+				     WHERE
+			]]>
+				     <include refid="criteria"></include>
+				     
+			<![CDATA[
+				     ROWNUM <= #{page} * #{perPageNum}
+				   )
+			 WHERE rn > (#{page} -1) * #{perPageNum}
+		     ORDER BY STORE_NO DESC
+		   ]]>
+	</select>
+	<!-- 30. 검색 리스트 -->
+	<select id="getStarList" resultType="store" parameterType="criteria">
+			<![CDATA[
+			SELECT *
+			 FROM ( 
+				   SELECT /*+INDEX_DESC(STORE STORE_PK_STORE_NO)*/
+				   		  ROWNUM AS rn,
+				   		  STORE_NO,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED 
+				     FROM store
+				     WHERE
+			]]>
+				     <include refid="criteria"></include>
+				     
+			<![CDATA[
+				     ROWNUM <= #{page} * #{perPageNum}
+				   )
+			 WHERE rn > (#{page} -1) * #{perPageNum}
+		     ORDER BY STORE_STAR_POINT DESC
+		   ]]>
+	</select>
+	<!-- 30. 검색 리스트 -->
+	<select id="getReviewList" resultType="store" parameterType="criteria">
+			<![CDATA[
+			SELECT *
+			 FROM ( 
+				   SELECT /*+INDEX_DESC(STORE STORE_PK_STORE_NO)*/
+				   		  ROWNUM AS rn,
+				   		  STORE_NO,
+				  		  STORE_LOGO_URL, 
+					      STORE_NAME, 
+					      STORE_STAR_POINT, 
+					      STORE_REVIEW_CNT, 
+					      STORE_REPLY_CNT,
+					      STORE_DELIVERY_TIME,
+					      STORE_PAYMENT_METHOD,
+					      STORE_MIN_PRICE,
+					      STORE_CUPON_BASE,
+					      STORE_ENABLED 
+				     FROM store
+				     WHERE
+			]]>
+				     <include refid="criteria"></include>
+				     
+			<![CDATA[
+				     ROWNUM <= #{page} * #{perPageNum}
+				   )
+			 WHERE rn > (#{page} -1) * #{perPageNum}
+		     ORDER BY STORE_REVIEW_CNT DESC
+		   ]]>
+	</select>
+	
+</mapper>

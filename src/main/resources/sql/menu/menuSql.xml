@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="menuSql">
+
+	<resultMap id="menu" type="menu">
+		<id property="menuNo" column="menu_no"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="menuUrl" column="menu_url"/>
+        <result property="menuInfo" column="menu_info"/>
+        <result property="menuPrice" column="menu_price"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="menuMain" column="menu_main"/>
+        <result property="menuDiscount" column="menu_discount"/>
+        <result property="menuPromotion" column="menu_promotion"/>
+        <result property="menuStock" column="menu_stock"/>
+        <result property="storeNo" column="store_no"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="menuCategoryNo" column="menu_category_no"/>    
+    </resultMap>
+    
+	<resultMap id="menuCategory" type="menuCategory">
+		<id property="menuCategoryNo" column="menu_category_no"/>
+        <result property="menuCategoryName" column="menu_category_name"/>
+        <result property="menuCategoryInfo" column="menu_category_info"/>
+        <result property="storeNo" column="store_no"/>
+        <collection property="menu" javaType="java.util.List" resultMap="menu" />    
+    </resultMap>
+    
+	<!-- 01.criteria(메뉴 검색조건) -->
+	<sql id="criteria">
+		<if test="keyword != null">
+			menu_name like '%' || #{keyword} || '%' and
+		</if>
+	</sql>
+	<!-- 02.메뉴 리스트 -->
+	<select id="getMenuList" resultType="menu">
+		SELECT *
+		  FROM menu
+		 WHERE STORE_NO = #{storeNo}
+	</select>
+	<!-- 03.메뉴 카테고리 리스트 -->
+	<select id="getMenuCateList" resultMap="menuCategory">
+		SELECT *
+		  FROM menu_category
+		 WHERE STORE_NO = #{storeNo}
+	</select>
+	<!-- 04. 메뉴 등록 -->
+	<insert id="createMenu">
+		INSERT INTO menu (MENU_NAME,
+						  MENU_URL,
+					      MENU_INFO,
+						  MENU_PRICE,
+					      STORE_NO,
+						  OWNER_ID
+						 ) 
+		     VALUES (#{menuName},
+				  	 #{menuUrl}, 
+				  	 #{menuInfo}, 
+				  	 #{menuPrice}, 
+				  	 #{storeNo}, 
+				  	 #{ownerId}
+				  	 )
+	</insert>
+	<!-- 05.메뉴 업데이트 -->
+	<update id="updateMenu" useGeneratedKeys="true" keyProperty="menuNo">
+		<selectKey keyProperty="menuNo" resultType="int" order="BEFORE">
+			SELECT MAX(MENU_NO) FROM MENU
+		</selectKey>
+			UPDATE menu 
+			   SET MENU_URL = #{menuUrl},
+			   	   MENU_NAME = #{menuName},
+				   MENU_INFO = #{menuInfo}, 
+				   MENU_PRICE = #{menuPrice}
+		     WHERE MENU_NO = #{menuNo}
+	</update>
+	<!-- 05. 메뉴 삭제 -->
+	<delete id="deleteMenu">
+		DELETE FROM menu
+		 WHERE STORE_NO = #{storeNo}
+		   AND MENU_NO = #{menuNo}
+	</delete>
+	<!-- 06. 가게번호로 찾기 메뉴 찾기-->
+	<select id="findAllBySno" resultType="menu">
+		SELECT *
+		  FROM menu
+		 WHERE STORE_NO = #{storeNo}
+	</select>
+	<!-- 07. 가게번호로 찾기 메뉴 찾기-->
+	<select id="findMenuBySno" resultType="menu">
+		SELECT MENU_NO
+		  FROM menu
+		 WHERE STORE_NO = #{storeNo}
+	</select>
+	<!-- 08. 메뉴 총개수 -->
+	<select id="countMenu" resultType="int">
+		SELECT COUNT(MENU_NO) 
+		  FROM menu
+		 WHERE STORE_NO = #{storeNo}
+	</select>
+	<select id="findStoreNo" resultType="menu" parameterType="menu">
+		SELECT STORE_NO
+		  FROM menu
+		 WHERE STORE_NO = #{storeNo}
+	</select>
+	
+</mapper>

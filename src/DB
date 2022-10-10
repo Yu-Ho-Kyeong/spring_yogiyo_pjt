@@ -1,0 +1,218 @@
+--member-----------------------------------------------------
+drop table MEMBER_YOGIYO;
+create table MEMBER_YOGIYO(
+    member_id varchar(100) , 
+    member_pwd varchar(100) ,
+    member_name varchar(50) ,
+    member_mail varchar(300) ,
+    member_fail_cnt number(1) ,
+    member_success_cnt number(1) ,
+    levels number(1) NOT NULL ,
+    member_buy_cnt number(10) ,
+    member_enabled number(1) DEFAULT '1' ,
+    constraint MEMBER_YOGIYO_pk_member_id primary key(member_id)
+);
+
+-- member auth-------------------------------------------------
+drop table MEMBER_AUTH;
+create table MEMBER_AUTH(
+    member_id varchar(100) , 
+    authority varchar(100) DEFAULT 'ROLE_MEMBER' NOT NULL ,
+    CONSTRAINT fk_MEMBER_AUTH FOREIGN KEY (member_id) REFERENCES MEMBER_YOGIYO(member_id)
+);
+--member_review--------------------------------------------
+DROP TABLE member_review;
+create table member_review (
+    review_no number(10),
+    member_id varchar2(10),
+    review_menu_name nvarchar2(100),
+    review_content nvarchar2(1000),
+    review_date date,
+    review_star_point number(1),
+    review_recommend_cnt number(10),
+    review_img nvarchar2(100),
+    order_no number(10),
+    store_no number(10),
+    constraint review_pk_member primary key(review_no)
+);
+
+drop sequence member_review_seq;
+create sequence member_review_seq minvalue 0;
+select member_review_seq.nextval from dual;
+
+--admin--------------------------------------------
+drop table admin;
+create table admin(
+    admin_id varchar2(100),
+    admin_pwd nvarchar2(100),
+    admin_name nvarchar2(10),
+    admin_enabled CHAR(1) ,
+    constraint admin_pk_admin_id primary key(admin_id)
+);
+--admin_auth--------------------------------------------
+drop table admin_auth;
+create table admin_auth(
+    admin_id varchar2(100),
+    authority_name nvarchar2(100) DEFAULT 'ROLE_ADMIN' NOT NULL ,
+    constraint auth_pk_admin primary key(authority_name, admin_id)
+);
+--account(삭제)------------------------------------------------------------
+drop table account;
+create table account(
+    username varchar2(100) NOT NULL,
+    password nvarchar2(100) ,
+    is_enabled NUMBER(1),
+    constraint account_pk primary key(username)
+);
+--authority(삭제)------------------------------------------------------------
+drop table authority;
+create table authority(
+    username varchar2(100) NOT NULL,
+    authority_name nvarchar2(100) ,
+    CONSTRAINT fk_authority FOREIGN KEY (username) REFERENCES account(username)
+);
+--store ----------------------------------------------------------
+drop table store;
+create table store(
+	store_no NUMBER(38) NOT NULL,
+	category_id NUMBER(38) NOT NULL,
+	store_address nvarchar2(100),
+	store_name varchar(50) ,
+	store_star_point number(10),
+	store_review_cnt NUMBER(38) ,
+	store_reply_cnt number(10),
+	store_open_time nvarchar2(100),
+	store_close_time nvarchar2(100),
+	owner_id varchar2(100),
+	owner_info varchar2(1000),
+	store_delivery_time varchar(50) ,
+	store_tel varchar2(20),
+	store_logo_url varchar(255) ,
+	store_payment_method varchar(50) ,
+	store_min_price varchar(30) ,
+	store_cupon_base varchar(20) ,
+	store_enabled NUMBER(1) ,
+	constraint store_pk_store_no primary key(store_no)
+);
+
+drop sequence store_seq;
+create sequence store_seq minvalue 0;
+select store_seq.nextval from dual;
+--category ----------------------------------------------------------
+DROP TABLE category;
+CREATE TABLE category(
+	category_id NUMBER(38),
+	category_name varchar(50),
+	category_click_url varchar(255), 
+	category_img_url varchar(255),
+	category_alt varchar(50), 
+	constraint category_pk_category_id primary key(category_id)
+);
+
+drop sequence category_seq;
+create sequence category_seq minvalue 0;
+select category_seq.nextval from dual;
+--owner-----------------------------------------------
+DROP TABLE owner;
+create table owner(
+	owner_id varchar(100),
+	owner_pwd varchar(100),
+	owner_mail varchar(100),
+	owner_name varchar(50),
+	owner_enabled CHAR(1) CHECK(ENABLED='0' OR ENABLED='1') ,
+	CONSTRAINT owner_pk PRIMARY KEY (owner_id)
+);
+-- owner auth-----------------------------------------------
+drop table owner_auth;
+create table owner_auth(
+    owner_id varchar(100) , 
+    authority_name varchar(50) DEFAULT 'ROLE_OWNER' NOT NULL ,
+	CONSTRAINT owner_pk_auth PRIMARY KEY (owner_id, authority_name)
+);
+--owner_reply--------------------------------------------
+drop table owner_reply;
+create table owner_reply(
+	owner_reply_no number(10),
+    owner_reply_name nvarchar2(10),
+    owner_reply_content nvarchar2(1000),
+    owner_reply_date date,
+    reply_no number(10),
+    owner_id varchar2(100),
+    CONSTRAINT reply_pk_owner PRIMARY KEY (owner_reply_no)
+);
+
+drop sequence owner_reply_seq;
+create sequence owner_reply_seq minvalue 0;
+select owner_reply_seq.nextval from dual;
+
+--order--------------------------------------------
+drop table member_order;
+create TABLE member_order (
+    member_order_no number(10),
+    member_order_date date,
+    store_name nvarchar2(100),
+    member_order_menu nvarchar2(100),
+    member_order_price number(10),
+    member_order_count number(10),
+    member_order_total_price number(10),
+    member_order_tel number(13),
+    member_order_address nvarchar2(100),
+    member_order_request nvarchar2(100),
+    store_no number(10),
+    member_id varchar2(100),
+    constraint order_pk_member primary key(member_order_no)
+);
+
+drop sequence member_order_seq;
+create sequence member_order_seq minvalue 0;
+select member_order_seq.nextval from dual;
+
+--order_list--------------------------------------------
+drop table order_list;
+create table order_list (
+    menu_no number(10),
+    member_order_no number(10),
+    order_list_price number(10),
+    order_list_menu_cnt number(10),
+    member_id varchar2(100)
+);
+--menu--------------------------------------------
+drop table menu;
+create table menu (
+    menu_no number(10),
+    menu_name nvarchar2(100),
+    menu_url nvarchar2(100),
+    menu_info nvarchar2(1000),
+    menu_price nvarchar2(30),
+    menu_type nvarchar2(100),
+    menu_main nvarchar2(10),
+    menu_discount number(10),
+    menu_promotion nvarchar2(30),
+    menu_stock number(10),
+    store_no number(10),
+    owner_id varchar2(100),
+    constraint menu_pk primary key(menu_no)
+);
+
+drop sequence menu_seq;
+create sequence menu_seq minvalue 0;
+select menu_seq.nextval from dual;
+
+--menu category(삭제)--------------------------------------------
+drop table menu_category;
+create table menu_category (
+    menu_category_no number(10), 
+    menu_category_name nvarchar2(100),
+    menu_category_info nvarchar2(500),
+    store_no number(10),
+    constraint category_pk_menu primary key(menu_category_no)
+);
+
+drop sequence menu_category_seq;
+create sequence menu_category_seq minvalue 0;
+select menu_categoery_seq.nextval from dual;
+
+COMMIT;
+
+
+

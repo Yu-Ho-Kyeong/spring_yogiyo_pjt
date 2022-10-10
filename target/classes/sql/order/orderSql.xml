@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="orderSql">
+
+	<resultMap type="order" id="order">
+         <id column="order_no" property="orderNo"/>
+         <result column="order_date" property="orderDate"/>
+         <result column="order_payment_method" property="orderPaymentMethod"/>
+         <result column="order_menu" property="orderMenu"/>
+         <result column="order_amount" property="orderAmount"/>
+         <result column="order_total_price" property="orderTotalPrice" />
+         <result column="order_tel" property="orderTel" />
+         <result column="order_address" property="orderAddress" />
+         <result column="order_request" property="orderRequest" />
+         <result column="store_no" property="storeNo" />
+         <result column="member_id" property="memberId" />
+         <result column="order_enabled" property="orderEnabled" />
+         <result column="order_store_name" property="orderStoreName"/>
+         <association property="store" javaType="store" resultMap="store"></association>
+   </resultMap>
+   <resultMap type="cart" id="cart">
+         <id column="cartNo" property="cart_no"/>
+         <result column="member_id" property="memberId"/>
+         <result column="menu_no" property="menuNo"/>
+         <result column="cart_amount" property="cartAmount"/>
+         <result column="store_no" property="storeNo"/>
+         <result column="menu_name" property="menuName"/>
+         <result column="menu_price" property="menuPrice"/>
+         <result column="total_price" property="totalPrice"/>
+         <association property="store" javaType="store" resultMap="store"></association>
+         <association property="menu" javaType="menu" resultMap="menu"></association>
+   </resultMap>
+   
+   <resultMap type="store" id="store">
+      <id column="storeNo" property="store_no"/>
+	  <result column="category_id" property="categoryId"/>
+	  <result column="store_address" property="storeAddress"/>
+	  <result column="store_post_no" property="storePostNo"/>
+	  <result column="store_road_post" property="storeRoadPost" />
+	  <result column="store_detail_post" property="storeDetailPost" />
+	  <result column="store_name" property="storeName" />
+	  <result column="store_star_point" property="storeStarPoint" />
+	  <result column="store_review_cnt" property="storeReviewCnt" />
+	  <result column="store_reply_cnt" property="storeReplyCnt" />
+	  <result column="store_menu_cnt" property="storeMenuCnt" />
+	  <result column="store_open_time" property="storeOpenTime" />
+	  <result column="store_close_time" property="storeCloseTime" />
+	  <result column="owner_id" property="ownerId" />
+	  <result column="owner_info" property="ownerInfo" />
+	  <result column="store_delivery_time" property="storeDeliveryTime" />
+	  <result column="store_tel" property="storeTel" />
+	  <result column="store_logo_url" property="storeLogoUrl" />
+	  <result column="store_payment_method" property="storePaymentMethod" />
+	  <result column="store_min_price" property="storeMinPrice" />
+	  <result column="store_cupon_base" property="storeCuponBase" />
+	  <result column="store_enabled" property="storeEnabled" />
+	  <result column="avg_store_star_point" property="avgStoreStarPoint" />
+   </resultMap>
+   
+   <resultMap type="menu" id="menu">
+      <id column="menu_no" property="menuNo"/>
+	  <result column="menu_name" property="menuName" />
+	  <result column="menu_url" property="menuUrl" />
+	  <result column="menu_info" property="menuInfo" />
+	  <result column="menu_price" property="menuPrice" />
+	  <result column="menu_type" property="menuType" />
+	  <result column="menu_main" property="menuMain" />
+	  <result column="menu_discount" property="menuDiscount" />
+	  <result column="menu_promotion" property="menuPromotion" />
+	  <result column="menu_stock" property="menuStock" />
+	  <result column="owner_id" property="ownerId" />
+	  <result column="menu_category_no" property="menuCategoryNo" />
+   </resultMap>
+   
+	<select id="memberOrderList" resultMap="order" parameterType="criteria">
+		SELECT ORDER_NO,
+			   ORDER_DATE,
+			   ORDER_PAYMENT_METHOD,
+			   ORDER_MENU,
+			   ORDER_AMOUNT,
+			   ORDER_TOTAL_PRICE,
+			   ORDER_TEL,
+			   ORDER_ADDRESS,
+			   ORDER_REQUEST,
+			   STORE_NO,
+			   MEMBER_ID,
+			   ORDER_ENABLED,
+			   ORDER_STORE_NAME
+		  FROM (
+			  	SELECT ORDER_NO,
+				 	   ORDER_DATE,
+				   	   ORDER_PAYMENT_METHOD,
+				   	   ORDER_MENU,
+				   	   ORDER_AMOUNT,
+				   	   ORDER_TOTAL_PRICE,
+				   	   ORDER_TEL,
+				   	   ORDER_ADDRESS,
+				   	   ORDER_REQUEST,
+				   	   STORE_NO,
+				   	   MEMBER_ID,
+				   	   ORDER_ENABLED,
+				   	   ORDER_STORE_NAME,
+				   	   ROW_NUMBER() OVER(ORDER BY ORDER_NO DESC) AS RNUM
+				  FROM member_order 
+				 WHERE MEMBER_ID = #{memberId}
+			  		  ) O
+			WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		 ORDER BY ORDER_NO DESC
+	</select>
+	
+	<select id="totalOrderCount" resultType="int">
+		SELECT COUNT(ORDER_NO)
+		  FROM member_order
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	<!-- 주문자 정보 -->
+  	<select id="getMemberInfo" resultType="member">	
+  		SELECT MEMBER_ID,
+  		 	   MEMBER_NAME, 
+  		 	   MEMBER_MAIL, 
+  		 	   MEMBER_ADDRESS,
+  		 	   MEMBER_PHONE_NO
+  		  FROM member_yogiyo 
+  		 WHERE MEMBER_ID = #{memberId}
+  	</select>
+  	<!-- 주문정보 가져오기 -->
+  	<select id="orderInfo" resultMap="order">
+  		SELECT *
+  		  FROM member_order
+  		 WHERE ORDER_NO = #{orderNo}
+  	</select>
+	<select id="getOrderList" parameterType="member" resultMap="order">
+		SELECT O.*, S.*
+		  FROM member_order O 
+	 LEFT JOIN store S
+		    ON O.STORE_NO = S.STORE_NO
+		 WHERE O.MEMBER_ID = #{memberId}
+	  ORDER BY O.ORDER_DATE DESC
+	</select>
+	<select id="getCartList" parameterType="member" resultMap="cart">
+   		SELECT C.*, S.*, M.*
+		  FROM cart C 
+		  JOIN store S 
+		    ON C.STORE_NO = S.STORE_NO 
+		  JOIN menu M 
+		    ON C.MENU_NO = M.MENU_NO
+   	     WHERE C.MEMBER_ID = #{memberId}
+   </select>
+   <insert id="insertOrderList" parameterType="order" useGeneratedKeys="true" keyProperty="orderNo">
+   		<selectKey keyProperty="orderNo" resultType="int" order="BEFORE">
+			select max(order_no) from member_order
+		</selectKey>
+   		INSERT INTO member_order(ORDER_DATE,
+   								 ORDER_PAYMENT_METHOD,
+   								 ORDER_MENU,
+   								 ORDER_AMOUNT,
+   								 ORDER_TOTAL_PRICE,
+   								 ORDER_TEL,
+   								 ORDER_ADDRESS,
+   								 ORDER_REQUEST,
+   								 STORE_NO,
+   								 MEMBER_ID,
+   								 ORDER_ENABLED,
+   								 ORDER_STORE_NAME
+   								) 
+   		VALUES (now(), 
+   				#{orderPaymentMethod}, 
+   				#{orderMenu}, 
+   				#{orderAmount}, 
+   				#{orderTotalPrice}, 
+   				#{orderTel},   				
+   				#{orderAddress}, 
+   				#{orderRequest}, 
+   				#{storeNo},
+   				#{memberId},
+   				0,
+   				#{orderStoreName}
+   				)
+   </insert>
+   <select id="findStoreName" resultMap="cart">
+	   SELECT S.STORE_NAME 
+		 FROM cart C  		
+		 JOIN store S 
+		   ON C.STORE_NO = S.STORE_NO 
+	    WHERE C.CART_NO = (
+						   SELECT max(C.CART_NO)
+						   FROM cart C
+						   WHERE C.MEMBER_ID = #{memberId}
+		 				  )
+		AND C.MEMBER_ID = #{memberId}
+   </select>
+</mapper>

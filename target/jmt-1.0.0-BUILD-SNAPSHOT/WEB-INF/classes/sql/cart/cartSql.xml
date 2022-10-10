@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="cartSql">
+	<!-- 01.회원 카트 목록 -->
+	<select id="getCartList" resultType="cart">
+	  SELECT C.CART_NO, 
+	  		 C.MEMBER_ID, 
+	  		 C.MENU_NO, 
+	  		 C.CART_AMOUNT, 
+	  		 M.MENU_NAME, 
+	  		 M.MENU_PRICE
+		FROM cart C LEFT OUTER JOIN menu M 
+		  ON C.MENU_NO = M.MENU_NO
+	   WHERE MEMBER_ID = #{memberId}
+	ORDER BY CART_NO
+	</select>
+	<!-- 02. 새로운 카트 생성 -->
+	<select id="getNewCartList" resultType="int">
+		SELECT MAX(CART_NO)
+		  FROM cart
+	</select>
+	<!-- 다른 가게 장바구니 체크 -->
+	<select id="checkStore" resultType="int">
+		SELECT COUNT(*)
+		  FROM cart
+		 WHERE MEMBER_ID = #{memberId} 
+		   AND STORE_NO != #{storeNo}
+	</select>	
+	<!-- 03.카트 체크 -->
+	<select id="checkCart" resultType="cart">
+		SELECT *
+		  FROM cart
+		 WHERE MEMBER_ID = #{memberId} 
+		   AND STORE_NO = #{storeNo}
+		   AND MENU_NO = #{menuNo}
+	</select>
+	<!-- 04.카트 담기 -->
+	<insert id="addCart">
+		INSERT INTO cart(MEMBER_ID, MENU_NO, STORE_NO, CART_AMOUNT)
+		VALUES (#{memberId}, #{menuNo}, #{storeNo}, #{cartAmount}) 
+	</insert>
+	<!-- 04.카트 담았는데 또 담기 -->
+	<update id="addPlusCart">
+		UPDATE cart
+		   SET cart_amount = cart_amount + 1
+		 WHERE MEMBER_ID = #{memberId} 
+		   AND STORE_NO = #{storeNo}
+		   AND MENU_NO = #{menuNo} 
+	</update>
+	<!-- 04.카트 수량 증가 -->
+	<update id="plusCart">
+		UPDATE cart
+		   SET cart_amount = cart_amount + 1
+		 WHERE cart_no = #{cartNo}
+	</update>
+	<!-- 04.카트 수량 감소 -->
+	<update id="minusCart">
+		UPDATE cart
+		   SET cart_amount = cart_amount - 1
+		 WHERE cart_no = #{cartNo}
+	</update>
+	<!-- 05.카트 삭제 -->
+	<delete id="deleteCart">
+		DELETE FROM cart
+		 WHERE CART_NO = #{cartNo}
+	</delete>
+	<!-- 06.카트 전체삭제 -->
+	<delete id="deleteAllCart">
+		DELETE FROM cart
+		 WHERE MEMBER_ID = #{memberId}
+	</delete>
+</mapper>

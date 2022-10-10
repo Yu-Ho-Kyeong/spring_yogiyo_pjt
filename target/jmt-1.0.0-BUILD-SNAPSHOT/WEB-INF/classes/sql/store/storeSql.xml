@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="storeSql">
+	<!-- 01. 가게등록 -->
+	<insert id="createStore" useGeneratedKeys="true" >
+			INSERT INTO store(CATEGORY_ID,
+							  STORE_ADDRESS,
+							  STORE_POST_NO,
+							  STORE_ROAD_POST,
+							  STORE_DETAIL_POST,
+							  STORE_NAME,
+							  STORE_STAR_POINT,
+							  STORE_REVIEW_CNT,
+							  STORE_REPLY_CNT,
+							  STORE_MENU_CNT,
+							  STORE_OPEN_TIME,
+							  STORE_CLOSE_TIME,
+							  OWNER_ID,
+							  OWNER_INFO,
+							  STORE_DELIVERY_TIME,
+							  STORE_TEL,
+							  STORE_LOGO_URL,
+							  STORE_PAYMENT_METHOD,
+							  STORE_MIN_PRICE,
+							  STORE_CUPON_BASE,
+							  STORE_ENABLED
+							  ) 
+					  VALUES (#{categoryId},
+							  #{storeAddress},							 
+							  #{storePostNo},							 
+							  #{storeRoadPost},							 
+							  #{storeDetailPost},							 
+							  #{storeName},
+							  0,
+							  0,
+							  0,
+							  0,
+							  #{storeOpenTime},
+							  #{storeCloseTime},
+							  #{ownerId},
+							  #{ownerInfo},
+							  #{storeDeliveryTime},
+							  #{storeTel},
+							  #{storeLogoUrl},
+							  #{storePaymentMethod},
+							  #{storeMinPrice},
+							  #{storeCuponBase},
+							  0
+							  )
+	</insert>
+	<!-- 02.가게 정보 업데이트 -->
+	<update id="updateStore" useGeneratedKeys="true" keyProperty="storeNo">
+	<selectKey keyProperty="storeNo" resultType="int" order="BEFORE">
+		SELECT MAX(STORE_NO) FROM store
+	</selectKey>
+		UPDATE store 
+		   SET STORE_LOGO_URL = #{storeLogoUrl},
+		   	   STORE_NAME = #{storeName},
+		   	   OWNER_INFO = #{ownerInfo},
+		   	   CATEGORY_ID = #{categoryId},
+		   	   STORE_ADDRESS = #{storeAddress},
+		   	   STORE_POST_NO = #{storePostNo},
+		   	   STORE_ROAD_POST = #{storeRoadPost},
+		   	   STORE_DETAIL_POST = #{storeDetailPost},
+			   STORE_OPEN_TIME = #{storeOpenTime},
+			   STORE_CLOSE_TIME = #{storeCloseTime},
+			   STORE_MIN_PRICE = #{storeMinPrice},
+			   STORE_TEL = #{storeTel},
+			   STORE_DELIVERY_TIME = #{storeDeliveryTime},
+			   STORE_PAYMENT_METHOD = #{storePaymentMethod}
+	     WHERE STORE_NO = #{storeNo}
+	</update>
+	<!-- 03. 가게 상세보기 -->
+	<select id="getStoreDetail" resultType="store">
+		SELECT *
+		  FROM store s
+		 WHERE STORE_NO = #{storeNo}
+	</select>
+	<!-- 04.가게 삭제 -->
+	<delete id="deleteStore">
+		DELETE FROM store
+		 WHERE STORE_NO = #{storeNo}
+	</delete>
+	<!-- 05. 가게번호로 오너찾기 -->
+	<select id="findOwnerById" resultType="string">
+		SELECT OWNER_ID 
+		  FROM store 
+		 WHERE STORE_NO = #{storeNo}
+		   AND ROWNUM = 1
+	</select>
+	<!-- 06.리뷰 개수 반영 -->
+	<update id="updateReviewCnt">
+		UPDATE store S
+		   SET S.STORE_REVIEW_CNT = (SELECT COUNT(REVIEW_NO)
+									   FROM review R
+									  WHERE R.STORE_NO = #{storeNo}
+									 ) 
+		 WHERE S.STORE_NO= #{storeNo}
+	</update>
+	<!-- 07.메뉴 개수 반영 -->
+	<update id="updateMenuCnt">
+		UPDATE store S
+		   SET S.STORE_MENU_CNT = (SELECT COUNT(MENU_NO)
+									 FROM menu M
+								    WHERE M.STORE_NO = #{storeNo}
+								   )
+		 WHERE S.STORE_NO= #{storeNo}
+	</update>
+	<!-- 08.댓글 개수 반영 -->
+	<update id="updateReplyCnt">
+		UPDATE store 
+		   SET STORE_REPLY_CNT = (SELECT COUNT(OWNER_REPLY_NO)
+									FROM owner_reply
+								   WHERE STORE_NO = #{storeNo}
+								  )
+		 WHERE STORE_NO= #{storeNo}
+	</update>
+	<!-- 09. store 총별점 평균 반영 -->
+	<select id="avgStorePoint" resultType="double">
+		UPDATE store S
+		SET	S.STORE_STAR_POINT = 
+						(SELECT ROUND(STORE_STAR_POINT/3, 1) AS R
+						   FROM (
+								 SELECT (IFNULL(AVG(R.REVIEW_MAT_POINT),0)+
+										 IFNULL(AVG(R.REVIEW_YANG_POINT),0)+
+										 IFNULL(AVG(R.REVIEW_BAEDAL_POINT),0))AS STORE_STAR_POINT
+								    FROM review R
+								   WHERE R.STORE_NO = #{storeNo}
+								GROUP BY STORE_NO
+								  HAVING STORE_NO = #{storeNo}
+								  ) AS R
+						 )   
+		WHERE STORE_NO = #{storeNo}		
+	</select>	
+	
+</mapper>

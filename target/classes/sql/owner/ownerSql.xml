@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerSql">
+
+	<!-- id 중복체크 쿼리문 -->
+	<select id="idCheck" resultType="int">
+		<![CDATA[
+			SELECT COUNT(OWNER_ID)
+			  FROM owner
+			 WHERE OWNER_ID = #{ownerId}
+		]]>		
+		</select>
+	<!-- 02. 회원 아이디로 비밀번호 확인-->
+	<select id="ownerPwdCheck" resultType="string">
+		SELECT OWNER_PWD 
+		  FROM owner 
+		 WHERE OWNER_ID = #{ownerId}
+	</select>
+	<!-- 03.아이디로 비밀번호 불러오기 (비밀번호 변경시 사용) -->
+	<select id="findPwdById" resultType="string">
+		SELECT OWNER_PWD 
+		  FROM owner
+		 WHERE OWNER_ID = #{ownerId} 
+	</select>
+	<!-- 04. 회원 정보 조회-->
+	<select id="ownerMyPage" resultType="owner">
+		SELECT OWNER_ID, OWNER_NAME, OWNER_MAIL
+		  FROM owner
+		 WHERE OWNER_ID = #{ownerId}
+	</select>
+	<!-- 05. 회원 비밀번호 변경 -->
+	<update id="ownerChangePwd">
+		UPDATE owner
+		   SET OWNER_PWD = #{ownerPwd}
+		 WHERE OWNER_ID = #{ownerId}
+	</update>
+	<!-- 06. 회원 닉네임 변경-->
+	<update id="ownerUpdateName">
+		UPDATE owner
+		   SET OWNER_NAME = #{ownerName} 
+		 WHERE OWNER_ID = #{ownerId}
+	</update>		
+	<!-- 07. 회원 정보 변경-->
+	<update id="ownerUpdate" parameterType="owner">
+		UPDATE owner
+		   SET OWNER_MAIL = #{ownerMail}
+	  	 WHERE OWNER_ID = #{ownerId}
+	</update>
+	<!-- 08. 회원 탈퇴-->
+	<delete id="ownerDelete">
+		DELETE FROM owner 
+		 WHERE OWNER_ID = #{ownerId}
+	</delete>
+	<!-- 09. 회원 탈퇴-->
+	<delete id="authDelete">
+		DELETE FROM owner_auth
+		 WHERE OWNER_ID = #{ownerId}
+	</delete>
+	<!-- 10. 내 가게 전체보기(myStoreList) -->
+	<select id="myStoreList" resultType="store">
+		SELECT /*+ INDEX_DESC(STORE STORE_PK)*/
+			   STORE_NO,
+			   STORE_LOGO_URL,
+			   STORE_NAME,
+			   STORE_STAR_POINT,
+			   STORE_REVIEW_CNT,
+			   STORE_REPLY_CNT
+		  FROM store
+		 WHERE OWNER_ID = #{ownerId}
+	</select>
+	<!-- 11. 내 가게보기(myStore) -->
+	<select id="ownerMyStoreDetail" resultType="store">
+		SELECT STORE_NO,
+			   STORE_LOGO_URL,
+			   CATEGORY_ID,
+			   STORE_NAME,
+			   STORE_TEL,
+			   STORE_ADDRESS,
+			   STORE_POST_NO,
+			   STORE_ROAD_POST,
+			   STORE_DETAIL_POST,
+			   STORE_STAR_POINT,
+			   STORE_REVIEW_CNT,
+			   STORE_OPEN_TIME,
+			   STORE_CLOSE_TIME,
+			   STORE_MIN_PRICE,
+			   OWNER_INFO,
+			   STORE_PAYMENT_METHOD, 
+			   STORE_DELIVERY_TIME   
+		  FROM store
+		 WHERE STORE_NO = #{storeNo} 
+	</select>
+	<update id="updateOwnerMyStore">
+		UPDATE store 
+		   SET STORE_LOGO_URL = #{storeLogoUrl},
+		   	   STORE_NAME = #{storeName},
+		   	   OWNER_INFO = #{ownerInfo},
+		   	   CATEGORY_ID = #{categoryId},
+		   	   STORE_ADDRESS = #{storeAddress},
+		   	   STORE_POST_NO = #{storePostNo},
+		   	   STORE_ROAD_POST = #{storeRoadPost},
+		   	   STORE_DETAIL_POST = #{storeDetailPost},
+			   STORE_OPEN_TIME = #{storeOpenTime},
+			   STORE_CLOSE_TIME = #{storeCloseTime},
+			   STORE_MIN_PRICE = #{storeMinPrice},
+			   STORE_TEL = #{storeTel},
+			   STORE_PAYMENT_METHOD = #{storePaymentMethod},
+			   STORE_DELIVERY_TIME = #{storeDeliveryTime}
+	     WHERE STORE_NO = #{storeNo}		
+	</update>
+</mapper>
